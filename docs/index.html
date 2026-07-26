@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A Quantum Moment Atlas for Reinforcement Learning</title>
+<meta name="description" content="One fixed set of quantum walk measurements becomes a reusable atlas of the policy-evaluation curve: discount sweeps, task reweightings, and later re-analyses as classical re-reads at no additional quantum cost.">
+<style>
+:root {
+  --bg:#FCFCFA; --ink:#191C1F; --muted:#5A6068; --accent:#2742B8;
+  --rule:#DCDDD8; --codebg:#F1F1EC;
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+  --mono:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
+}
+* { box-sizing:border-box; }
+html { background:var(--bg); }
+body {
+  margin:0 auto; max-width:44rem; padding:clamp(2rem,6vw,4.5rem) clamp(1.1rem,4vw,2rem) 3rem;
+  color:var(--ink); font-family:var(--serif); font-size:1.05rem; line-height:1.62;
+}
+a { color:var(--accent); text-decoration:none; }
+a:hover { text-decoration:underline; }
+a:focus-visible, .btn:focus-visible { outline:2px solid var(--accent); outline-offset:3px; }
+.eyebrow { font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 1rem; }
+h1 { font-size:clamp(1.7rem,4.6vw,2.45rem); line-height:1.16; font-weight:600; margin:.1rem 0 .4rem; letter-spacing:-.01em; }
+.subtitle { font-size:clamp(1.05rem,2.6vw,1.3rem); color:var(--muted); margin:0 0 1.1rem; line-height:1.35; }
+.author { margin:0 0 1.6rem; }
+.author .aff { color:var(--muted); }
+.actions { display:flex; flex-wrap:wrap; gap:.6rem; margin:0 0 2.2rem; }
+.btn { font-family:var(--mono); font-size:.8rem; padding:.5rem .95rem; border:1px solid var(--ink); border-radius:999px; color:var(--ink); }
+.btn:hover { background:var(--ink); color:var(--bg); text-decoration:none; }
+.btn.pending { border-style:dashed; border-color:var(--rule); color:var(--muted); cursor:default; }
+.btn.pending:hover { background:none; color:var(--muted); }
+.ladder { display:block; width:100%; height:14px; color:var(--muted); opacity:.55; margin:2.1rem 0; }
+h2 { font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:500; margin:0 0 .9rem; }
+section { margin:0 0 2rem; }
+.plain p { margin:0 0 .9rem; }
+.plain p:last-child { margin-bottom:0; }
+.steps ol { margin:0; padding-left:1.35rem; }
+.steps li { margin:0 0 .8rem; padding-left:.25rem; }
+.steps li::marker { font-family:var(--mono); font-size:.82rem; color:var(--muted); }
+.steps b { font-weight:600; }
+.scope { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+.scope h3 { font-family:var(--mono); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:500; margin:0 0 .55rem; }
+.scope ul { margin:0; padding-left:1.1rem; }
+.scope li { margin:0 0 .5rem; font-size:.95rem; }
+.abstract p { margin:0; hyphens:auto; }
+figure { margin:0; }
+figure img { width:100%; height:auto; border:1px solid var(--rule); border-radius:4px; background:#fff; }
+figcaption { font-size:.85rem; color:var(--muted); margin-top:.55rem; line-height:1.5; }
+.map .row { display:grid; grid-template-columns:9.5rem 1fr; gap:1rem; padding:.55rem 0; border-top:1px solid var(--rule); }
+.map .row:last-child { border-bottom:1px solid var(--rule); }
+.map code { font-family:var(--mono); font-size:.82rem; }
+.map span { font-size:.95rem; }
+pre { background:var(--codebg); border-radius:6px; padding:1rem 1.1rem; overflow-x:auto; font-family:var(--mono); font-size:.78rem; line-height:1.55; }
+footer { margin-top:2.4rem; font-size:.88rem; color:var(--muted); }
+@media (max-width:520px) {
+  .map .row { grid-template-columns:1fr; gap:.15rem; }
+  .scope { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+<p class="eyebrow">Preprint &middot; July 2026</p>
+<h1>A Quantum Moment Atlas for Reinforcement&nbsp;Learning</h1>
+<p class="subtitle">Policy Evaluation Across Discount Factors</p>
+<p class="author">Kamran Ansari <span class="aff">&middot; Stanford University</span></p>
+<nav class="actions">
+  <a class="btn" href="amortized_qpe_v2.9.pdf">Paper (PDF)</a>
+  <span class="btn pending" id="arxiv-link">arXiv &mdash; link pending</span>
+  <a class="btn" href="https://github.com/kansari123/A-Quantum-Moment-Atlas-for-Reinforcement-Learning">Code &amp; data</a>
+  <a class="btn" href="mailto:ansarik@stanford.edu">Contact</a>
+</nav>
+<svg class="ladder" viewBox="0 0 1000 14" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="-0.75" y="3" width="1.5" height="8"/><rect x="499.25" y="3" width="1.5" height="8"/><rect x="749.25" y="3" width="1.5" height="8"/><rect x="874.25" y="3" width="1.5" height="8"/><rect x="936.75" y="3" width="1.5" height="8"/><rect x="968.00" y="3" width="1.5" height="8"/><rect x="983.63" y="3" width="1.5" height="8"/><rect x="991.44" y="3" width="1.5" height="8"/><rect x="995.34" y="3" width="1.5" height="8"/><rect x="997.30" y="3" width="1.5" height="8"/><rect x="997.50" y="1" width="2.5" height="12"/></g></svg>
+<section class="plain">
+<h2>What this is</h2>
+<p>In reinforcement learning, evaluating a policy does not give one number, it gives a <em>curve</em>: the policy&rsquo;s value depends on the discount factor &gamma;, and the effective horizon that &gamma; encodes is a modeling choice that practice sweeps across decades. Existing quantum approaches to this problem are <em>per-query</em>: each new discount, each new task, and each later re-analysis consumes a fresh full-depth circuit.</p>
+<p>This paper&rsquo;s protocol instead makes <strong>one fixed set of quantum walk-operator measurements</strong>, on a logarithmic ladder of discount rungs, and post-processes it classically into a reusable model, the <em>atlas</em> of the title: a compact 16-pole macromodel per rung. From that single measured artifact, the <strong>entire value&ndash;discount curve, every reweighting of a 16-task register, and any later re-analysis</strong> are read off classically at no additional quantum cost, with the exact &gamma;&nbsp;=&nbsp;1 pole giving the average-reward <em>gain</em> term directly.</p>
+</section>
+<section class="steps">
+<h2>How it works</h2>
+<ol>
+<li><b>Encode.</b> The policy&rsquo;s transition structure is loaded as a symmetrized qubitized walk: a circuit whose coherent depth grows as &radic;H, where classical estimators integrate trajectories of length H.</li>
+<li><b>Acquire once.</b> A fixed table of Chebyshev moments of that walk is measured on a logarithmic ladder of discount rungs. This table is the atlas, and it is the only quantum step.</li>
+<li><b>Answer many times.</b> Classical post-processing (per-rung M&ouml;bius conditioning, balanced polarization, passive pole fits anchored by the exact &gamma;&nbsp;=&nbsp;1 gain pole) distills the moments into a 16-pole macromodel per rung; discount sweeps, task reweightings, and re-analyses are then free re-reads of the model.</li>
+</ol>
+</section>
+<section class="map">
+<h2>Measured results</h2>
+<div class="row"><code>Distillation</code><span>The distilled 16-pole model is <em>more</em> accurate than the 6,552-step Chebyshev estimator it compresses (0.14% vs 0.22% median under identical noise): 410&times; compression at negative accuracy cost.</span></div><div class="row"><code>Compression law</code><span>The measured model-order law K<sup>*</sup>&nbsp;&prop;&nbsp;H<sup>0.505</sup> matches the &radic;H Bernstein count across four decades of horizon on a 3,600-state bottlenecked chain (0.044% noiseless, 0.0037% on a 16-task register, 0.14% median under per-moment noise, error decreasing with depth).</span></div><div class="row"><code>Break-even</code><span>One curve on the band is 41 queries; one acquisition of the 16-task register is 656. The atlas amortizes past Q<sup>*</sup>&nbsp;&approx;&nbsp;8&times;10<sup>2</sup> queries at the seed transform constant (&approx;5&times;10<sup>4</sup>, i.e. &approx;76 register acquisitions, at the constant realized here); past break-even the per-query cost exceeds the atlas&rsquo;s by the unbounded ratio Q/Q<sup>*</sup>.</span></div><div class="row"><code>On hardware</code><span>A two-run study on <code>ibm_fez</code>: deep circuits locate the device&rsquo;s decoherence wall near 500 routed two-qubit gates and validate the noise model&rsquo;s variance at shot level; a shallow two-state instance performs genuine spectroscopy (all ten moment orders informative), reconstructing its value curve to 14% blind and, under a truth-referenced two-parameter calibration (validation-only), to 0.19%, at the 0.12% truncation floor.</span></div>
+</section>
+<section>
+<h2>Scope, plainly</h2>
+<div class="scope">
+<div><h3>Where it helps</h3><ul>
+<li>Succinctly described environments with exponentially large state spaces, where classical evaluation is forced onto sampled trajectories</li>
+<li>Workloads that sweep discounts, re-weight task registers, or return for later re-analysis of the same policy</li>
+<li>Average-reward (gain) analysis, anchored by the exact &gamma;&nbsp;=&nbsp;1 pole</li>
+<li>Pre-fault-tolerant devices: shallow coherent circuits, incoherent across shots, classical inversion</li>
+</ul></div>
+<div><h3>Where it doesn&rsquo;t</h3><ul>
+<li>At the study&rsquo;s <em>measured</em> realization constant (c&nbsp;=&nbsp;32) the atlas loses to classical trajectory estimates by &approx;7&times; on total steps; the seed rule c&nbsp;=&nbsp;4 wins by &approx;9&times;, and break-even requires c&nbsp;&lesssim;&nbsp;12</li>
+<li>Single-question workloads below the break-even query count</li>
+<li>The advantage-bearing experiments are classically simulated; the hardware study validates the estimator layer at two to four states only</li>
+<li>Sign-free reversible structure caps the speedup at quadratic, and the advantage accounting is formula-level, conditional on the stated access model</li>
+</ul></div>
+</div>
+</section>
+<svg class="ladder" viewBox="0 0 1000 14" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="-0.75" y="3" width="1.5" height="8"/><rect x="499.25" y="3" width="1.5" height="8"/><rect x="749.25" y="3" width="1.5" height="8"/><rect x="874.25" y="3" width="1.5" height="8"/><rect x="936.75" y="3" width="1.5" height="8"/><rect x="968.00" y="3" width="1.5" height="8"/><rect x="983.63" y="3" width="1.5" height="8"/><rect x="991.44" y="3" width="1.5" height="8"/><rect x="995.34" y="3" width="1.5" height="8"/><rect x="997.30" y="3" width="1.5" height="8"/><rect x="997.50" y="1" width="2.5" height="12"/></g></svg>
+<section>
+<h2>Distillation</h2>
+<figure>
+  <img src="fig_distill.png" alt="Chart comparing the distilled 16-pole model against the full Chebyshev kernel-sum estimator it compresses, under identical noise.">
+  <figcaption>Distillation figure from the paper: the 410&times; compressed pole model against the full 6,552-step kernel-sum estimator whose moments it consumes, under identical per-moment noise. The compressed model is the more accurate of the two.</figcaption>
+</figure>
+</section>
+<svg class="ladder" viewBox="0 0 1000 14" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="-0.75" y="3" width="1.5" height="8"/><rect x="499.25" y="3" width="1.5" height="8"/><rect x="749.25" y="3" width="1.5" height="8"/><rect x="874.25" y="3" width="1.5" height="8"/><rect x="936.75" y="3" width="1.5" height="8"/><rect x="968.00" y="3" width="1.5" height="8"/><rect x="983.63" y="3" width="1.5" height="8"/><rect x="991.44" y="3" width="1.5" height="8"/><rect x="995.34" y="3" width="1.5" height="8"/><rect x="997.30" y="3" width="1.5" height="8"/><rect x="997.50" y="1" width="2.5" height="12"/></g></svg>
+<section class="abstract">
+<h2>Abstract</h2>
+<p>In reinforcement learning, policy evaluation is a curve, not a number: the value J(&gamma;)&nbsp;=&nbsp;d<sub>0</sub><sup>&#8868;</sup>(I&nbsp;&minus;&nbsp;&gamma;P)<sup>&minus;1</sup>r of a fixed policy depends on the discount &gamma;, and the horizon H&nbsp;=&nbsp;1/(1&nbsp;&minus;&nbsp;&gamma;) it encodes is a modeling choice that practice sweeps across decades. On succinctly described environments with exponentially large state spaces, where classical evaluation is forced onto sampled trajectories, quantum methods already hold two established advantages over that classical baseline for estimating J at a <em>single</em> &gamma;: coherent walk circuits of depth &radic;H where classical estimators integrate trajectories of length H, and amplitude-estimation cost 1/&epsilon; where Monte Carlo pays 1/&epsilon;<sup>2</sup>. Compared to existing quantum methods, the advantage this paper targets is <em>amortization</em>: those methods are per-query (each new &gamma;, each new task, each later re-analysis consumes a fresh full-depth circuit), whereas here one fixed set of walk-operator measurements is post-processed into a reusable model, the <em>atlas</em>, that serves the <em>entire</em> value&ndash;discount curve, every reweighting of a task family, and any later re-analysis at no additional quantum cost. The difference is quantitative. A query here is one point evaluation, one task at one discount: a single curve on the band is 41 queries, one acquisition of the 16-task register is 656. At the seed transform constant the break-even is Q<sup>*</sup>&nbsp;&approx;&nbsp;8&times;10<sup>2</sup> queries, under twenty curve sweeps or 1.2 register acquisitions (5&times;10<sup>4</sup>, &approx;76 acquisitions, at the constant realized here), and past it the per-query cost exceeds the atlas&rsquo;s by the unbounded ratio Q/Q<sup>*</sup>. The method measures Chebyshev moments of the symmetrized walk operator on a logarithmic ladder of discount rungs and post-processes them classically (per-rung M&ouml;bius conditioning, balanced polarization, and passive pole fits anchored by an exact pole at &gamma;&nbsp;=&nbsp;1, the average-reward <em>gain</em> term of reinforcement learning&rsquo;s Laurent decomposition) into a 16-pole macromodel per rung. An honest three-regime cost ledger prices the two layers separately: against classical, the atlas retains the 1/&epsilon; estimation cost and the &radic;H coherent-depth scaling (its total step count is linear in H); against per-query quantum methods, it adds curve-, task-, and re-analysis-level amortization; crossover query counts are given in both directions with measured constants. Numerically, on a 3600-state bottlenecked chain the pipeline reconstructs four decades of horizon at 0.044% (noiseless), 0.0037% on a 16-task register, and 0.14% median under per-moment noise, with error <em>decreasing</em> in horizon depth; a measured compression law K<sup>*</sup>&nbsp;&prop;&nbsp;H<sup>0.505</sup> matches the &radic;H Bernstein count; and the distilled pole model is <em>more</em> accurate than the 6,552-step Chebyshev estimator it compresses (410&times; compression at negative accuracy cost). Ablations show each design element is necessary: positivity (fits explode by seven orders of magnitude even at exact moments), port balancing (a 10<sup>4</sup> error amplifier), per-rung conditioning (an irreducible deterministic deep-horizon bias), and the explicit &gamma;&nbsp;=&nbsp;1 pole. The measurement-and-estimation layer is then validated on quantum hardware in a two-run study on <code>ibm_fez</code>: the deep circuits locate the device&rsquo;s decoherence wall near 500 routed two-qubit gates and validate the noise model&rsquo;s variance at shot level, while a shallow two-state instance performs genuine spectroscopy (all ten moment orders informative), reconstructing its value curve to 14% blind and, under a truth-referenced two-parameter noise calibration (validation-only), to 0.19%, at the 0.12% truncation floor. If realized at hardware scale, this defines a natural early workload for pre-fault-tolerant quantum devices (shallow coherent circuits, incoherent across shots, classical inversion) and a new way to consume policy evaluation: discount sweeps, average-reward analysis, and task re-weighting as free re-reads of one measured artifact. <em>Limitations:</em> the advantage-bearing experiments are classically simulated (the hardware study validates the estimator layer at two to four states only); sign-free reversible structure caps the speedup at quadratic; and the advantage accounting is formula-level, conditional on the stated access model.</p>
+</section>
+<svg class="ladder" viewBox="0 0 1000 14" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="-0.75" y="3" width="1.5" height="8"/><rect x="499.25" y="3" width="1.5" height="8"/><rect x="749.25" y="3" width="1.5" height="8"/><rect x="874.25" y="3" width="1.5" height="8"/><rect x="936.75" y="3" width="1.5" height="8"/><rect x="968.00" y="3" width="1.5" height="8"/><rect x="983.63" y="3" width="1.5" height="8"/><rect x="991.44" y="3" width="1.5" height="8"/><rect x="995.34" y="3" width="1.5" height="8"/><rect x="997.30" y="3" width="1.5" height="8"/><rect x="997.50" y="1" width="2.5" height="12"/></g></svg>
+<section class="map">
+<h2>Repository map</h2>
+<div class="row"><code>code/</code><span>The three campaign scripts sharing a verbatim testbed constructor, plus the figure generator; all randomness pinned, archived results reproduce byte-for-byte.</span></div><div class="row"><code>evidence/</code><span>Protocol and quantitative accuracy criteria fixed prior to data collection, outcome ledgers, labeled amendments and repair addenda, machine-readable results.</span></div><div class="row"><code>hardware/</code><span>IBM hardware diagnostics notebook (blank and executed), both <code>ibm_fez</code> runs&rsquo; raw JSONs, and the reanalysis artifacts.</span></div><div class="row"><code>paper/</code><span>Paper source, compiled PDF, and the four figures.</span></div>
+</section>
+<svg class="ladder" viewBox="0 0 1000 14" preserveAspectRatio="none" aria-hidden="true"><g fill="currentColor"><rect x="-0.75" y="3" width="1.5" height="8"/><rect x="499.25" y="3" width="1.5" height="8"/><rect x="749.25" y="3" width="1.5" height="8"/><rect x="936.75" y="3" width="1.5" height="8"/><rect x="968.00" y="3" width="1.5" height="8"/><rect x="983.63" y="3" width="1.5" height="8"/><rect x="991.44" y="3" width="1.5" height="8"/><rect x="995.34" y="3" width="1.5" height="8"/><rect x="997.30" y="3" width="1.5" height="8"/><rect x="997.50" y="1" width="2.5" height="12"/><rect x="874.25" y="3" width="1.5" height="8"/><rect x="749.25" y="3" width="1.5" height="8"/></g></svg>
+<section>
+<h2>Cite</h2>
+<pre>@misc{ansari2026momentatlasrl,
+  title  = {A Quantum Moment Atlas for Reinforcement Learning:
+            Policy Evaluation Across Discount Factors},
+  author = {Ansari, Kamran},
+  year   = {2026},
+  note   = {arXiv preprint; identifier to be added}
+}</pre>
+</section>
+<footer>Materials on this site mirror the public code and data repository accompanying the paper. Accuracy criteria were fixed prior to data collection; all randomness is pinned, and every archived result file reproduces byte-for-byte from the shipped scripts. The tick marks above are the paper&rsquo;s own discount ladder, &gamma;<sub>j</sub>&nbsp;=&nbsp;1&nbsp;&minus;&nbsp;2<sup>&minus;j</sup>, accumulating at the exact &gamma;&nbsp;=&nbsp;1 gain pole.</footer>
+</body>
+</html>
