@@ -1,0 +1,30 @@
+<svg viewBox="0 0 1200 240" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="A Quantum Moment Atlas for Reinforcement Learning">
+  <rect x="1" y="1" width="1198" height="238" rx="14" fill="#FCFCFA" stroke="#E4E2DC" stroke-width="1.5"/>
+  <text x="600" y="60" text-anchor="middle"
+        font-family="SF Mono, ui-monospace, Menlo, Consolas, monospace"
+        font-size="12" letter-spacing="4" fill="#2742B8">MEASURE ONCE &#183; RE-READ FOREVER</text>
+  <text x="600" y="114" text-anchor="middle"
+        font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif"
+        font-size="40" fill="#1A1A1A">A Quantum Moment Atlas for Reinforcement Learning</text>
+  <text x="600" y="150" text-anchor="middle"
+        font-family="Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif"
+        font-style="italic" font-size="19" fill="#6B6B66">Policy evaluation across discount factors</text>
+  <line x1="280" y1="192" x2="920" y2="192" stroke="#D8D6CF" stroke-width="1"/>
+  <g fill="#2742B8" opacity="0.62">
+    <rect x="279" y="186" width="2" height="12"/>
+    <rect x="599" y="186" width="2" height="12"/>
+    <rect x="759" y="186" width="2" height="12"/>
+    <rect x="839" y="186" width="2" height="12"/>
+    <rect x="879" y="186" width="2" height="12"/>
+    <rect x="899" y="186" width="2" height="12"/>
+    <rect x="909" y="186" width="2" height="12"/>
+    <rect x="914" y="186" width="2" height="12"/>
+  </g>
+  <rect x="918.5" y="180" width="3" height="24" fill="#2742B8"/>
+  <text x="280" y="220" text-anchor="middle"
+        font-family="SF Mono, ui-monospace, Menlo, Consolas, monospace"
+        font-size="10" fill="#8A8A85">&#947;=0</text>
+  <text x="920" y="220" text-anchor="middle"
+        font-family="SF Mono, ui-monospace, Menlo, Consolas, monospace"
+        font-size="10" fill="#2742B8">&#947;&#8594;1</text>
+</svg>
