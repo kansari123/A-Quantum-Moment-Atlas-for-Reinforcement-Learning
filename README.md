@@ -7,7 +7,6 @@
 
 **Kamran Ansari** · Stanford University · ansarik@stanford.edu
 
-<a href="paper/amortized_qpe_v2.9.pdf"><img alt="Paper PDF, v2.9, 19 pages" src="https://img.shields.io/badge/paper-v2.9%20%C2%B7%2019%20pages-2742B8"></a>
 <img alt="arXiv identifier pending" src="https://img.shields.io/badge/arXiv-pending-8A8A85">
 <a href="#reproduce-it"><img alt="Reproduction verified byte-identical" src="https://img.shields.io/badge/reproduction-byte--identical%20%E2%9C%93-1a7f37"></a>
 <a href="hardware/"><img alt="Hardware: ibm_fez, two runs" src="https://img.shields.io/badge/hardware-ibm__fez%20%C2%B7%202%20runs-4c566a"></a>
@@ -24,6 +23,7 @@
 
 - **One measurement set, four decades of horizon.** The atlas reconstructs the value–discount band at **0.044 %** noiseless, **0.0037 %** on a 16-task register, and **0.14 %** median under per-moment noise — with error *decreasing* in horizon depth.
 - **410× compression at negative accuracy cost.** The distilled 16-pole model is *more* accurate than the 6,552-step estimator it compresses.
+- **Amortization over per-query quantum methods.** Break-even at **Q\* ≈ 8×10²** queries at the seed constant — under twenty curve sweeps — after which the per-query cost exceeds the atlas's by **Q/Q\***, linear and unbounded.
 - **A measured √H law.** Minimal kernel degree scales as **K\* ∝ H^0.505**, matching the √H Bernstein count.
 - **Hardware-validated estimator layer.** On `ibm_fez`, a shallow instance performs genuine spectroscopy: value curve to **0.19 %** (calibrated, validation-only) at the 0.12 % truncation floor.
 
@@ -50,6 +50,34 @@ flowchart LR
     class A,B q
     class C,D,E,F cl
 ```
+
+## The advantage, priced
+
+Two different comparisons, two different kinds of advantage — and the paper prices both formula-level with the constants **measured in this study**, stating the losses at the same prominence as the wins.
+
+<img src="docs/assets/fig_breakeven.png" alt="Log-log plot of total cost versus queries answered: the per-query quantum line grows linearly, the atlas is flat after one acquisition with break-even near 8e2 queries at the seed constant and 5e4 at the measured constant, and classical trajectories sit flat in between" width="100%">
+
+<sub>Formula-level workload pricing at the study's operating point (ε_J ≈ 1.4×10⁻³); every constant is from the paper's crossover analysis. A *query* is one point evaluation — one task at one discount. One curve read = 41 queries; one 16-task register acquisition = 656.</sub>
+
+### vs. per-query quantum methods — the advantage is *amortization*
+
+Prior quantum policy evaluation is **per-query**: each new discount, each new task reward, each later re-analysis consumes a fresh full-depth coherent circuit. The atlas measures **once**; every further question is classical arithmetic. A workload of Q queries therefore costs a per-query method **Q/Q\* times more** — linear and unbounded in the number of questions asked.
+
+- **Break-even Q\* ≈ 8×10² queries** at the seed constant (c = 4): under **twenty curve sweeps**, or **1.2 register acquisitions**. At the measured constant (c = 32): Q\* ≈ 5×10⁴ — ≈ **76 register acquisitions**.
+- Three properties **no step count prices**, and per-query methods have none of them: **(i)** the output is a *model* — a passive ≤16-pole object per rung whose ℓ = 0 weight reads out the average reward g, valid at every γ *including ones chosen after measurement*; **(ii)** compression has **negative accuracy cost** — the pole model beats the estimator it distills; **(iii)** the register turns one measurement plan into a **task-family object** — any convex reweighting of the 16 tasks' curves is free.
+- **Circuit posture:** coherent depth ≤ c√(2H) per circuit, incoherent across shots — a natural pre-fault-tolerant workload — versus full-depth coherent circuits consumed per query.
+
+### vs. classical trajectory estimates — quadratic, constant-governed, stated in both directions
+
+- The atlas **retains in full** the statistical quantum advantage (amplitude estimation: 1/ε where Monte Carlo pays 1/ε²) and the dynamical one **at the level of coherent depth** (√H-depth circuits where classical estimators integrate length-H trajectories). Its *total* step count is nonetheless linear in H: ∼√H moments measured at depths up to √H.
+- Whether that nets a total-step win is a question of **constants**, answered in both directions: at the seed constant c = 4 the atlas **wins by ≈9×**; at the *measured* c = 32 it **loses by ≈7×**; the crossover sits at **c ≲ 12**. Driving c from 32 toward 4 is a classical-transform engineering problem — the single highest-leverage open item.
+- Classical trajectories are **natively amortized too** (a stored path bank reweights to every γ and every task mixture) — so the amortization case targets per-query quantum methods, and the case against classical rests on depth, estimation cost, and the distillation result. The ledger is unflattering on purpose.
+
+| Regime | Total steps (band + family) | Max coherent depth | Amortization |
+|---|---|---|---|
+| **R1** — classical trajectories | Õ(H/ε_J²) | n/a | native: band + task reweighting |
+| **R2** — per-query coherent quantum | Õ(√H/ε_J) *per query*, × Q | Õ(√H/ε_J) | none |
+| **R3** — moment atlas (this work) | Õ(c²H/ε_mom) **once** (c = 32 measured, 4 seed) | c√(2H) × AE ladder | full: band, tasks, re-analysis; model output; g readout |
 
 ## Headline results
 
@@ -117,7 +145,6 @@ python3 make_figs.py     # → the four paper figures (self-checks t₂ = 6.3039
 | [`code/`](code/) | The three campaign scripts sharing a verbatim testbed constructor — `qrl_testbed.py` (validation checks, compression law, signed/raw-port ablations), `qrl_repair.py` (the balanced, unconditioned arm), `qrl_warp.py` (the full pipeline) — plus `make_figs.py`. |
 | [`evidence/`](evidence/) | Registration with accuracy criteria **fixed prior to data collection**, the outcome ledger, labeled amendments and repair addenda, and the archived machine-readable results `results_qrl1{,c,d}.json`. |
 | [`hardware/`](hardware/) | IBM diagnostics notebook (blank + executed), both `ibm_fez` runs' raw JSONs, and run-1/run-2 reanalysis artifacts (JSON + PNG). |
-| [`paper/`](paper/) | Paper source, compiled PDF, and the four figures. |
 | [`docs/`](docs/) | Landing page source and README assets. |
 
 <details>
